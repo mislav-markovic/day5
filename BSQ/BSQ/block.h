@@ -33,10 +33,10 @@ namespace block
   public:
     virtual double func(double input) const = 0;
     virtual void display(std::ostream& output) const = 0;
-    virtual ~block_specialization() = 0;
+    virtual ~block_specialization();
   };
 
-  template <class Predicate, typename... Args>
+  template <typename Predicate, typename... Args>
   class impl : public block_specialization
   {
   private:
@@ -51,6 +51,10 @@ namespace block
     double func(double input) const override
     {
       return std::apply([this, input](auto const&... elem) {return func_(input, elem...); }, parameters_);
+    }
+    void display(std::ostream& output) const override
+    {
+      
     }
   };
 

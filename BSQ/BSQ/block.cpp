@@ -8,9 +8,6 @@ namespace block
   {
   }
 
-  block_specialization::~block_specialization() = default;
-
-
   double block::apply(const double input) const
   {
     return block_type_->func(input);
