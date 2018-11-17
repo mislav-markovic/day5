@@ -1,5 +1,4 @@
 #pragma once
-
 namespace block
 {
   namespace operations
@@ -20,12 +19,7 @@ namespace block
 
   enum class type
   {
-    identity,
-    addition,
-    multiplication,
-    power,
-    limit,
-    condition
+    identity, addition, multiplication, power, limit, condition
   };
 
   class block_specialization
@@ -33,7 +27,7 @@ namespace block
   public:
     virtual double func(double input) const = 0;
     virtual void display(std::ostream& output) const = 0;
-    virtual ~block_specialization();
+    virtual ~block_specialization() = 0;
   };
 
   template <typename Predicate, typename... Args>
@@ -43,18 +37,20 @@ namespace block
     Predicate func_;
     std::tuple<Args...> parameters_;
   public:
-    explicit impl(Predicate&& func, Args&&... args) : func_{std::forward<Predicate>(func)},
-                                                      parameters_{std::forward<Args>(args)...}
+    explicit impl(Predicate&& func, Args&&... args) : func_{std::forward<Predicate>(func)}, parameters_{std::forward<Args>(args)...}
     {
     }
 
+    impl(const impl& other) = delete;
+    impl(impl&& other) = delete;
+
     double func(double input) const override
     {
-      return std::apply([this, input](auto const&... elem) {return func_(input, elem...); }, parameters_);
+      return std::apply([this, input](auto const&... elem) { return func_(input, elem...); }, parameters_);
     }
+
     void display(std::ostream& output) const override
     {
-      
     }
   };
 
@@ -63,18 +59,12 @@ namespace block
   {
     switch (block_to_create)
     {
-    case type::identity: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::identity_func, parameters...);
-    case type::addition: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::addition_func, parameters...);
-    case type::multiplication: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::multiplication_func, parameters...);
-    case type::power: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::power_func, parameters...);
-    case type::limit: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::limit_func, parameters...);
-    case type::condition: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(
-        operations::condition_func, parameters...);
+    case type::identity: return std::make_unique<impl<decltype(operations::identity_func), Args...>>(std::move(operations::identity_func), parameters...);
+      //case type::addition: return std::make_unique<impl<decltype(operations::addition_func), Args...>>(operations::addition_func, parameters...);
+      //case type::multiplication: return std::make_unique<impl<decltype(operations::multiplication_func), Args...>>(operations::multiplication_func, parameters...);
+      //case type::power: return std::make_unique<impl<decltype(operations::power_func), Args...>>(operations::power_func, parameters...);
+      //case type::limit: return std::make_unique<impl<decltype(operations::limit_func), Args...>>(operations::limit_func, parameters...);
+      //case type::condition: return std::make_unique<impl<decltype(operations::condition_func), Args...>>(operations::condition_func, parameters...);
     default: throw std::invalid_argument("Unknown block specialization");
     }
   }
@@ -84,11 +74,11 @@ namespace block
   private:
     unsigned int position_;
     std::unique_ptr<block_specialization> block_type_;
-
   public:
     block(unsigned int position, type block_type);
     block(block&& other) noexcept = default;
     block(block const& other) = delete;
+    block& operator=(block&& other) noexcept;
     double apply(double input) const;
     void show() const;
   };

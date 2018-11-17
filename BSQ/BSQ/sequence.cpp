@@ -5,7 +5,7 @@ namespace sequence
 {
   double sequence::evaluate(double input) const
   {
-    return std::accumulate(blocks_.cbegin(), blocks_.cend(), 0., [](auto const& input, double acc) {return input.apply(acc); });
+    return std::accumulate(blocks_.cbegin(), blocks_.cend(), 0., [](double acc, auto const & input) {return input.apply(acc); });
   }
 
   void sequence::add_block(block::block block)
@@ -30,6 +30,7 @@ namespace sequence
   double sequence::evaluate_file(std::filesystem::path input_file) const
   {
     //TODO
+    return 0;
   }
 
   void sequence::show_sequence() const
