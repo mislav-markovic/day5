@@ -14,7 +14,7 @@ namespace sequence
     void delete_block(unsigned int position);
     void move_to_front(unsigned int position);
     void show_sequence() const;
-    double evaluate_file(std::filesystem::path input_file) const;
+    void evaluate_file(std::filesystem::path input_file) const;
   };
   
 }
