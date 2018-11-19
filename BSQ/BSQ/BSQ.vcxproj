@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="block.h" />
+    <ClInclude Include="operation.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="sequence.h" />
   </ItemGroup>
