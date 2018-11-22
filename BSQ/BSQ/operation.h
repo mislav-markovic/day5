@@ -1,6 +1,8 @@
 #pragma once
 #include <sstream>
 
+
+//TODO: template type for operations
 namespace operation
 {
   enum class type

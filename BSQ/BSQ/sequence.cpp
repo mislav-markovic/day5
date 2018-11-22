@@ -5,7 +5,7 @@
 
 namespace sequence
 {
-  double sequence::evaluate(double input) const
+	[[nodiscard]] double sequence::evaluate(double input) const noexcept
   {
     return std::accumulate(blocks_.cbegin(), blocks_.cend(), 0., [](double acc, auto const& input) { return input.apply(acc); });
   }
@@ -29,7 +29,7 @@ namespace sequence
     std::rotate(blocks_.begin(), it, it + 1);
   }
 
-  void sequence::evaluate_file(std::filesystem::path input_file) const
+  void sequence::evaluate_file(const std::filesystem::path input_file) const
   {
     std::ofstream output{"result.txt"};
     std::vector<double> v{};
@@ -43,7 +43,7 @@ namespace sequence
     std::copy(result.cbegin(), result.cend(), out_stream); //copy result to file
   }
 
-  void sequence::show_sequence() const
+  void sequence::show_sequence(std::ostream & sink) const
   {
     //TODO
   }
